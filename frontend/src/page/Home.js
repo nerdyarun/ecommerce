@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import HomeCard from "../component/HomeCard";
-import { useSelector } from "react-redux";
 import CartFeature from "../component/CartFeature";
 import { GrPrevious, GrNext } from "react-icons/gr";
+import { useSelector } from "react-redux";
+import AllProduct from "../component/AllProduct";
 
 const Home = () => {
+ 
   const productData = useSelector((state) => state.product.productList);
 
   const homeProductCartList = productData.slice(1, 5);
@@ -12,10 +14,11 @@ const Home = () => {
     (el) => el.category === "vegetable",
     []
   );
+ 
   const loadingArray = new Array(4).fill(null);
   const loadingArrayFeature = new Array(10).fill(null);
 
-  const slideProductRef = useRef()
+  const slideProductRef = useRef();
   const nextProduct = () => {
     slideProductRef.current.scrollLeft += 200;
   };
@@ -56,7 +59,8 @@ const Home = () => {
             ? homeProductCartList.map((el) => {
                 return (
                   <HomeCard
-                    key={el._id}
+                    key={el._id+"vegetable"}
+                    id={el._id}
                     image={el.image}
                     name={el.name}
                     price={el.price}
@@ -65,39 +69,56 @@ const Home = () => {
                 );
               })
             : loadingArray.map((el, index) => {
-                return <HomeCard key={index} loading={"loading..."} />;
+                return <HomeCard loading={"loading..."} key={index+"loading"} />;
               })}
         </div>
       </div>
 
-      <div className="">
+      <div>
         <div className="flex w-full items-center">
           <h2 className="font-bold text-2xl text-slate-800 mb-4">
             Fresh Vegetables
           </h2>
           <div className="ml-auto flex gap-4">
-            <button onClick={prevProduct} className="bg-slate-300 hover:bg-slate-400 text-lg p-1 rounded"><GrPrevious/></button>
-            <button onClick={nextProduct} className="bg-slate-300 hover:bg-slate-400 text-lg p-1 rounded"><GrNext/></button>
+            <button
+              onClick={prevProduct}
+              className="bg-slate-300 hover:bg-slate-400 text-lg p-1 rounded"
+            >
+              <GrPrevious />
+            </button>
+            <button
+              onClick={nextProduct}
+              className="bg-slate-300 hover:bg-slate-400 text-lg p-1 rounded"
+            >
+              <GrNext />
+            </button>
           </div>
         </div>
-        <div className="flex gap-5 overflow-scroll scrollbar-none scroll-smooth transition-all" ref={slideProductRef}>
-          {homeProductCartListVegetables[0] ? homeProductCartListVegetables.map((el) => {
-            return (
-              <CartFeature
-                key={el._id}
-                name={el.name}
-                category={el.category}
-                price={el.price}
-                image={el.image}
-              />
-            );
-          })
-        : loadingArrayFeature.map(el => <CartFeature
-        loading="loading..."/>)
-        
-        }
+        <div
+          className="flex gap-5 overflow-scroll scrollbar-none scroll-smooth transition-all"
+          ref={slideProductRef}
+        >
+          {homeProductCartListVegetables[0]
+            ? homeProductCartListVegetables.map((el) => {
+                return (
+                  <CartFeature
+                    key={el._id}
+                    id={el._id}
+                    name={el.name}
+                    category={el.category}
+                    price={el.price}
+                    image={el.image}
+                  
+                    />
+                );
+              })
+            : loadingArrayFeature.map((el, index) => (
+                <CartFeature loading="loading..." key={index+"cartLoading"} />
+              ))}
         </div>
       </div>
+
+    <AllProduct heading={"Your Product"} />      
     </div>
   );
 };

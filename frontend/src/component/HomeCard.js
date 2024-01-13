@@ -1,10 +1,14 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 
-function HomeCard({ name, image, category, price, loading }) {
+function HomeCard({ name, image, category, price, loading, id }) {
   return (
     <div className="bg-white shadow-md p-2 rounded min-w-[150px]">
       {name ? (
         <>
+         <Link to={`/menu/${id}`} onClick={
+            () => window.scrollTo({top:"0", behavior: "smooth"})
+          }>
           <div className="w-40 min-h-[150px]">
             <img src={image} alt="imgg" className="h-full w-full" />
           </div>
@@ -16,6 +20,7 @@ function HomeCard({ name, image, category, price, loading }) {
             <span className="text-red-500">₹</span>
             <span>{price}</span>
           </p>
+          </Link>
         </>
       ) :
       <div className="flex justify-center items-center h-full">{loading}</div>
